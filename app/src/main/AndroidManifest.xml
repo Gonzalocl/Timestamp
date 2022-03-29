@@ -11,7 +11,7 @@
         android:theme="@style/Theme.Timestamp">
 
         <activity
-            android:name=".entry_point.Launcher"
+            android:name=".io.entry_point.Launcher"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -20,7 +20,7 @@
         </activity>
 
         <activity
-            android:name=".entry_point.AssistantShortcut"
+            android:name=".io.entry_point.AssistantShortcut"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.ASSIST"/>

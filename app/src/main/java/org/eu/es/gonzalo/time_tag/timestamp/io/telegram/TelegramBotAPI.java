@@ -1,5 +1,6 @@
 package org.eu.es.gonzalo.time_tag.timestamp.io.telegram;
 
+import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -40,15 +41,23 @@ public class TelegramBotAPI {
             try {
                 put("chat_id", BOT_USER_CHAT_ID);
                 put("text", message);
+                put("disable_notification", true);
             } catch (JSONException e) {
                 Toast.makeText(context, "JSON ERROR", Toast.LENGTH_SHORT).show();
+                ((Activity) context).finish();
             }
         }};
         requestQueue.add(new JsonObjectRequest(Request.Method.POST,
                 BOT_API_URL_SEND_MESSAGE,
                 jsonObject,
-                response -> Toast.makeText(context, response.toString().substring(0, 50), Toast.LENGTH_SHORT).show(),
-                error -> Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show()));
+                response -> {
+                    Toast.makeText(context, response.toString().substring(0, 50), Toast.LENGTH_SHORT).show();
+                    ((Activity) context).finish();
+                },
+                error -> {
+                    Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show();
+                    ((Activity) context).finish();
+                }));
 
     }
 

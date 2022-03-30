@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 
 import org.eu.es.gonzalo.time_tag.timestamp.R;
+import org.eu.es.gonzalo.time_tag.timestamp.io.telegram.TelegramBotAPI;
 
 public class Launcher extends Activity {
 
@@ -13,5 +14,8 @@ public class Launcher extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_view);
+        TelegramBotAPI telegramBotAPI = new TelegramBotAPI("", "");
+        telegramBotAPI.setContext(this);
+        telegramBotAPI.sendMessageNotificationDisabled("HELLO");
     }
 }

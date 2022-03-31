@@ -6,16 +6,14 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 
 import org.eu.es.gonzalo.time_tag.timestamp.R;
-import org.eu.es.gonzalo.time_tag.timestamp.io.context.AndroidContext;
-import org.eu.es.gonzalo.time_tag.timestamp.io.context.DatabaseContext;
+import org.eu.es.gonzalo.time_tag.timestamp.io.context.ContextInitializer;
 
 public class Launcher extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AndroidContext.initialize(this);
-        DatabaseContext.initialize(this);
+        ContextInitializer.initializeAllContexts(this);
         setContentView(R.layout.main_view);
     }
 }

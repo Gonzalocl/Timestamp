@@ -17,7 +17,7 @@ public class AndroidContext {
     }
 
     private AndroidContext(Context context) {
-        this.applicationContext = context.getApplicationContext();
+        applicationContext = context.getApplicationContext();
     }
 
     public static AndroidContext getInstance() {

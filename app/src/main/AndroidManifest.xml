@@ -28,6 +28,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".io.ui.MainActivity"/>
+        <activity android:name=".io.ui.ConfigurationActivity"/>
+
     </application>
 
 </manifest>

@@ -20,7 +20,7 @@
         </activity>
 
         <activity
-            android:name=".io.entry_point.AssistantShortcut"
+            android:name=".io.ui.AssistantShortcutActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.ASSIST"/>

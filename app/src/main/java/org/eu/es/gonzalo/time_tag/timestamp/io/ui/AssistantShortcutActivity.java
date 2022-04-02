@@ -1,4 +1,4 @@
-package org.eu.es.gonzalo.time_tag.timestamp.io.entry_point;
+package org.eu.es.gonzalo.time_tag.timestamp.io.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import org.eu.es.gonzalo.time_tag.timestamp.R;
 import org.eu.es.gonzalo.time_tag.timestamp.io.context.ContextInitializer;
 
-public class AssistantShortcut extends Activity {
+public class AssistantShortcutActivity extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

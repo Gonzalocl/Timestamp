@@ -32,9 +32,7 @@ public class Launcher extends Activity {
         SettingDao settingDao = db.settingDao();
 
         try {
-            Setting setting = new Setting();
-            setting.setting = "aa";
-            setting.setting = "cc";
+            Setting setting = new Setting("set00", "va00");
 //            settingDao.insertAll(setting)
 //                    .subscribeOn(Schedulers.io())
 //                    .observeOn(AndroidSchedulers.mainThread())
@@ -47,7 +45,7 @@ public class Launcher extends Activity {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                            settings -> textView.setText(settings.get(0).setting),
+                            settings -> textView.setText(settings.isEmpty() ? "empty" : settings.get(0).getSetting()),
                             throwable -> textView.setText(throwable.getMessage())
                     );
 

@@ -15,8 +15,8 @@ import io.reactivex.rxjava3.core.Single;
 public interface SettingDao {
 
     @Query("SELECT * FROM setting")
-    public Single<List<Setting>> getAll();
+    Single<List<Setting>> getAll();
 
     @Insert
-    public Completable insertAll(Setting... settings);
+    Completable insertAll(Setting... settings);
 }

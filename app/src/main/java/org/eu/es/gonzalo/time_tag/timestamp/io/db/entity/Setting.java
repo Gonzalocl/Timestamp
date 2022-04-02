@@ -1,5 +1,6 @@
 package org.eu.es.gonzalo.time_tag.timestamp.io.db.entity;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -7,22 +8,11 @@ import androidx.room.PrimaryKey;
 public class Setting {
 
     @PrimaryKey
-    private String setting;
-    private String value;
+    public int id;
 
-    public String getSetting() {
-        return setting;
-    }
+    @ColumnInfo(name = "setting")
+    public String setting;
 
-    public void setSetting(String setting) {
-        this.setting = setting;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
+    @ColumnInfo(name = "value")
+    public String value;
 }

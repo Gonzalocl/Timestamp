@@ -11,7 +11,7 @@
         android:theme="@style/Theme.Timestamp">
 
         <activity
-            android:name=".io.entry_point.Launcher"
+            android:name=".io.ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -28,7 +28,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".io.ui.MainActivity"/>
         <activity android:name=".io.ui.ConfigurationActivity"/>
 
     </application>

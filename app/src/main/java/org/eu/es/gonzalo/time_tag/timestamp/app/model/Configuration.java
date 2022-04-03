@@ -1,26 +1,22 @@
 package org.eu.es.gonzalo.time_tag.timestamp.app.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Configuration {
 
-    public static final String BOT_API_TOKEN_SETTING_ID = "BOT_API_TOKEN";
-    public static final String BOT_USER_CHAT_ID_SETTING_ID = "BOT_USER_CHAT_ID";
+    private final Map<String, String> settings;
 
-    private String botApiToken;
-    private String botUserChatId;
-
-    public String getBotApiToken() {
-        return botApiToken;
+    public Configuration() {
+        // TODO set default settings
+        settings = new HashMap<>();
     }
 
-    public void setBotApiToken(String botApiToken) {
-        this.botApiToken = botApiToken;
+    public Configuration(Map<String, String> settings) {
+        this.settings = settings;
     }
 
-    public String getBotUserChatId() {
-        return botUserChatId;
-    }
-
-    public void setBotUserChatId(String botUserChatId) {
-        this.botUserChatId = botUserChatId;
+    public Map<String, String> getSettings() {
+        return settings;
     }
 }

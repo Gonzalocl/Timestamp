@@ -23,11 +23,14 @@ public class ConfigurationActivity extends Activity {
         setContentView(R.layout.configuration_activity);
 
         // get settings
-        Map<String, String> settings = ConfigurationConfiguration.getConfigurationUseCase().get();
+        ConfigurationConfiguration.getConfigurationUseCase().get(settings -> {
 
-        // set settings in ui
-        LinearLayout settingsLinearLayout = findViewById(R.id.configuration_activity_linear_layout);
-        settings.forEach((settingName, settingValue) -> addSetting(settingsLinearLayout, settingName, settingValue));
+            // set settings in ui
+            LinearLayout settingsLinearLayout = findViewById(R.id.configuration_activity_linear_layout);
+            settings.forEach((settingName, settingValue) -> addSetting(settingsLinearLayout, settingName, settingValue));
+            findViewById(R.id.configuration_activity_save_button).setClickable(true);
+
+        }, throwable -> UiUtil.setErrorView(ConfigurationActivity.this, throwable.getMessage()));
     }
 
     public void onClickSaveButton(View view) {

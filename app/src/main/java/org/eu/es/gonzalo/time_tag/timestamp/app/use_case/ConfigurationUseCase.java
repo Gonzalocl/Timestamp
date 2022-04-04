@@ -5,6 +5,7 @@ import org.eu.es.gonzalo.time_tag.timestamp.app.model.Configuration;
 import org.eu.es.gonzalo.time_tag.timestamp.app.repository.ConfigurationRepository;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class ConfigurationUseCase {
 
@@ -14,8 +15,8 @@ public class ConfigurationUseCase {
         configurationController = new ConfigurationController(configurationRepository);
     }
 
-    public Map<String, String> get() {
-        return configurationController.getConfiguration().getSettings();
+    public void get(Consumer<Map<String, String>> success, Consumer<Throwable> error) {
+        configurationController.getConfiguration(configuration -> success.accept(configuration.getSettings()), error);
     }
 
     public void save(Map<String, String> settings) {

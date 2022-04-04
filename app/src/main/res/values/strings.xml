@@ -3,4 +3,5 @@
     <string name="main_activity_timestamp_button">Timestamp</string>
     <string name="main_activity_configuration_button">Configuration</string>
     <string name="configuration_activity_save_button">Save</string>
+    <string name="error_view_close_button">Close</string>
 </resources>

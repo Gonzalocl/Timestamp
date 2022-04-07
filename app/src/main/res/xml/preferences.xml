@@ -1,0 +1,13 @@
+<?xml version ="1.0" encoding ="utf-8"?>
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <EditTextPreference
+        app:key="telegram_bot_api_token"
+        app:title="Telegram bot api token"/>
+
+    <EditTextPreference
+        app:key="telegram_bot_user_chat_id"
+        app:title="Telegram bot user chat id"/>
+
+</PreferenceScreen>

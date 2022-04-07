@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
     }
 
     public void onClickConfigurationButton(View view) {
-        startActivity(new Intent(this, ConfigurationActivity.class));
+        startActivity(new Intent(this, PreferencesActivity.class));
     }
 
 }

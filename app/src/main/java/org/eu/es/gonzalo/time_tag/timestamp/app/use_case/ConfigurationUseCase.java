@@ -11,6 +11,7 @@ public class ConfigurationUseCase {
 
     private final ConfigurationController configurationController;
 
+    // TODO inject controller
     public ConfigurationUseCase(ConfigurationRepository configurationRepository) {
         configurationController = new ConfigurationController(configurationRepository);
     }

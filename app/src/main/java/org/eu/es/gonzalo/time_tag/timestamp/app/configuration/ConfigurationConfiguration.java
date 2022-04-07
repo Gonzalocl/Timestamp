@@ -5,6 +5,8 @@ import org.eu.es.gonzalo.time_tag.timestamp.io.db.repository.DbConfigurationRepo
 
 public class ConfigurationConfiguration {
 
+    // TODO make singleton
+
     public static ConfigurationUseCase getConfigurationUseCase() {
         return new ConfigurationUseCase(new DbConfigurationRepository());
     }

@@ -3,6 +3,7 @@ package org.eu.es.gonzalo.time_tag.timestamp.io.db.repository;
 import org.eu.es.gonzalo.time_tag.timestamp.app.model.Configuration;
 import org.eu.es.gonzalo.time_tag.timestamp.app.repository.ConfigurationRepository;
 import org.eu.es.gonzalo.time_tag.timestamp.io.context.DatabaseContext;
+import org.eu.es.gonzalo.time_tag.timestamp.io.db.dao.SettingDao;
 import org.eu.es.gonzalo.time_tag.timestamp.io.db.entity.Setting;
 
 import java.util.function.Consumer;
@@ -20,10 +21,8 @@ public class DbConfigurationRepository implements ConfigurationRepository {
 
     @Override
     public void get(Consumer<Configuration> success, Consumer<Throwable> error) {
-        DatabaseContext.getInstance()
-                .getAppDatabase()
-                .settingDao()
-                .getAll()
+        SettingDao settingDao = DatabaseContext.getInstance().getAppDatabase().settingDao();
+        settingDao.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

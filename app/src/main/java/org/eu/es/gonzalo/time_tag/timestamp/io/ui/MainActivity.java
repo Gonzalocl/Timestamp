@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -21,7 +20,7 @@ public class MainActivity extends Activity {
     }
 
     public void onClickTimestampButton(View view) {
-        Toast.makeText(this, "onClickTimestampButton", Toast.LENGTH_SHORT).show();
+        UiUtil.sendTelegramBotMessageTimestamp();
     }
 
     public void onClickConfigurationButton(View view) {

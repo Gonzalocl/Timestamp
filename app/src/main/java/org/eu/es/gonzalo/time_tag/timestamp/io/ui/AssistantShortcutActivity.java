@@ -15,5 +15,6 @@ public class AssistantShortcutActivity extends Activity {
         super.onCreate(savedInstanceState);
         ContextInitializer.initializeAllContexts(this);
         setContentView(R.layout.assistant_view);
+        UiUtil.sendTelegramBotMessageTimestamp();
     }
 }

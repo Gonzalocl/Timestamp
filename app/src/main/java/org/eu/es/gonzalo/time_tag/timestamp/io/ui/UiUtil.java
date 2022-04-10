@@ -15,6 +15,7 @@ import org.eu.es.gonzalo.time_tag.timestamp.io.preferences.Timestamp;
 import org.eu.es.gonzalo.time_tag.timestamp.io.preferences.Timestamps;
 import org.eu.es.gonzalo.time_tag.timestamp.io.telegram.TelegramBotAPI;
 
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.LinkedList;
@@ -58,10 +59,17 @@ public class UiUtil {
         preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS,
                 gson.toJson(new Timestamps(){{setTimestamps(getLastElementsSubList(timestamps, MAX_LAST_TIMESTAMPS));}}));
 
-        sendTelegramBotMessageTimestamps(preferenceRepository);
+        sendTelegramBotMessageTimestamps(timestamps);
     }
 
-    private static void sendTelegramBotMessageTimestamps(PreferenceRepository preferenceRepository) {
+    private static void sendTelegramBotMessageTimestamps(List<Timestamp> timestamps) {
+
+        if (timestamps.isEmpty()) {
+            Toast.makeText(AndroidContext.getInstance().getApplicationContext(), "INFO: No Timestamps to send", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
         Optional<String> telegram_bot_api_token = preferenceRepository.get(PreferenceRepository.Preference.TELEGRAM_BOT_API_TOKEN);
         Optional<String> telegram_bot_user_chat_id = preferenceRepository.get(PreferenceRepository.Preference.TELEGRAM_BOT_USER_CHAT_ID);
         if (!(telegram_bot_api_token.isPresent() && telegram_bot_user_chat_id.isPresent())) {
@@ -71,7 +79,25 @@ public class UiUtil {
 
         TelegramBotAPI telegramBotAPI = new TelegramBotAPI(telegram_bot_api_token.get(), telegram_bot_user_chat_id.get());
         telegramBotAPI.setContext(AndroidContext.getInstance().getApplicationContext());
-        telegramBotAPI.sendMessageNotificationDisabled(String.format("/fix %s", ZonedDateTime.now().toOffsetDateTime()));
+
+        OffsetDateTime lastTimestamp = timestamps.get(0).getOffsetDateTime();
+        boolean anySent = false;
+        for (Timestamp timestamp : timestamps) {
+            if (!timestamp.isSent()) {
+                telegramBotAPI.sendMessageNotificationDisabled(String.format("Elapsed: %s", Duration.between(lastTimestamp, timestamp.getOffsetDateTime())));
+                telegramBotAPI.sendMessageNotificationDisabled(String.format("/fix %s", timestamp.getOffsetDateTime()));
+
+                anySent = true;
+            }
+            lastTimestamp = timestamp.getOffsetDateTime();
+        }
+
+        if (anySent) {
+            Gson gson = new Gson();
+            preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS,
+                    gson.toJson(new Timestamps(){{setTimestamps(getLastElementsSubList(timestamps, MAX_LAST_TIMESTAMPS));}}));
+
+        }
     }
 
     public static void clearLastTimestamps() {

@@ -1,9 +1,7 @@
 package org.eu.es.gonzalo.time_tag.timestamp.io.preferences;
 
-import java.time.OffsetDateTime;
-
 public class Timestamp {
-    private OffsetDateTime offsetDateTime;
+    private String timestamp;
     private boolean sent;
 
     public boolean isSent() {
@@ -14,11 +12,11 @@ public class Timestamp {
         this.sent = sent;
     }
 
-    public OffsetDateTime getOffsetDateTime() {
-        return offsetDateTime;
+    public String getTimestamp() {
+        return timestamp;
     }
 
-    public void setOffsetDateTime(OffsetDateTime offsetDateTime) {
-        this.offsetDateTime = offsetDateTime;
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }

@@ -16,8 +16,8 @@ import org.eu.es.gonzalo.time_tag.timestamp.io.preferences.Timestamps;
 import org.eu.es.gonzalo.time_tag.timestamp.io.telegram.TelegramBotAPI;
 
 import java.time.Duration;
-import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +25,7 @@ import java.util.Optional;
 public class UiUtil {
 
     private static final int MAX_LAST_TIMESTAMPS = 25;
+    private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
 
     public static void setErrorView(Activity activity, String message) {
 
@@ -50,9 +51,8 @@ public class UiUtil {
             timestamps = new LinkedList<>();
         }
 
-        OffsetDateTime now = ZonedDateTime.now().toOffsetDateTime();
         timestamps.add(new Timestamp() {{
-            setOffsetDateTime(now);
+            setTimestamp(ZonedDateTime.now().format(format));
             setSent(false);
         }});
 
@@ -80,16 +80,18 @@ public class UiUtil {
         TelegramBotAPI telegramBotAPI = new TelegramBotAPI(telegram_bot_api_token.get(), telegram_bot_user_chat_id.get());
         telegramBotAPI.setContext(AndroidContext.getInstance().getApplicationContext());
 
-        OffsetDateTime lastTimestamp = timestamps.get(0).getOffsetDateTime();
+        String lastTimestamp = timestamps.get(0).getTimestamp();
         boolean anySent = false;
         for (Timestamp timestamp : timestamps) {
             if (!timestamp.isSent()) {
-                telegramBotAPI.sendMessageNotificationDisabled(String.format("Elapsed: %s", Duration.between(lastTimestamp, timestamp.getOffsetDateTime())));
-                telegramBotAPI.sendMessageNotificationDisabled(String.format("/fix %s", timestamp.getOffsetDateTime()));
+                ZonedDateTime lastDate = ZonedDateTime.parse(lastTimestamp, format);
+                ZonedDateTime currentDate = ZonedDateTime.parse(timestamp.getTimestamp(), format);
+                telegramBotAPI.sendMessageNotificationDisabled(String.format("Elapsed: %s", Duration.between(lastDate, currentDate)));
+                telegramBotAPI.sendMessageNotificationDisabled(String.format("/fix %s", timestamp.getTimestamp()));
 
                 anySent = true;
             }
-            lastTimestamp = timestamp.getOffsetDateTime();
+            lastTimestamp = timestamp.getTimestamp();
         }
 
         if (anySent) {

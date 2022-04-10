@@ -13,4 +13,10 @@ public class SharedPreferenceRepository implements PreferenceRepository {
         SharedPreferences sharedPreferences = SharedPreferencesContext.getInstance().getSharedPreferences();
         return Optional.ofNullable(sharedPreferences.getString(preference, null));
     }
+
+    @Override
+    public void set(String preference, String value) {
+        SharedPreferences sharedPreferences = SharedPreferencesContext.getInstance().getSharedPreferences();
+        sharedPreferences.edit().putString(preference, value).apply();
+    }
 }

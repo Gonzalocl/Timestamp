@@ -37,7 +37,7 @@ public class UiUtil {
 
     }
 
-    public static void sendTelegramBotMessageTimestamp() {
+    public static void sendAndStoreTelegramBotMessageTimestamps() {
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
 
         Optional<String> last_timestamps = preferenceRepository.get(PreferenceRepository.Preference.LAST_TIMESTAMPS);
@@ -58,6 +58,10 @@ public class UiUtil {
         preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS,
                 gson.toJson(new Timestamps(){{setTimestamps(getLastElementsSubList(timestamps, MAX_LAST_TIMESTAMPS));}}));
 
+        sendTelegramBotMessageTimestamps(preferenceRepository);
+    }
+
+    private static void sendTelegramBotMessageTimestamps(PreferenceRepository preferenceRepository) {
         Optional<String> telegram_bot_api_token = preferenceRepository.get(PreferenceRepository.Preference.TELEGRAM_BOT_API_TOKEN);
         Optional<String> telegram_bot_user_chat_id = preferenceRepository.get(PreferenceRepository.Preference.TELEGRAM_BOT_USER_CHAT_ID);
         if (!(telegram_bot_api_token.isPresent() && telegram_bot_user_chat_id.isPresent())) {

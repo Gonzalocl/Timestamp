@@ -13,7 +13,7 @@ public class AssistantShortcutActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ContextInitializer.initializeAllContexts(this);
-        UiUtil.sendTelegramBotMessageTimestamp();
+        UiUtil.sendAndStoreTelegramBotMessageTimestamps();
         finish();
     }
 }

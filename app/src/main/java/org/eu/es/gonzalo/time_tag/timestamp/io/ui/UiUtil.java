@@ -23,6 +23,8 @@ import java.util.Optional;
 
 public class UiUtil {
 
+    private static final int MAX_LAST_TIMESTAMPS = 25;
+
     public static void setErrorView(Activity activity, String message) {
 
         activity.setContentView(R.layout.error_view);
@@ -54,7 +56,7 @@ public class UiUtil {
         }});
 
         preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS,
-                gson.toJson(new Timestamps(){{setTimestamps(timestamps);}}));
+                gson.toJson(new Timestamps(){{setTimestamps(getLastElementsSubList(timestamps, MAX_LAST_TIMESTAMPS));}}));
 
         Optional<String> telegram_bot_api_token = preferenceRepository.get(PreferenceRepository.Preference.TELEGRAM_BOT_API_TOKEN);
         Optional<String> telegram_bot_user_chat_id = preferenceRepository.get(PreferenceRepository.Preference.TELEGRAM_BOT_USER_CHAT_ID);
@@ -66,5 +68,22 @@ public class UiUtil {
         TelegramBotAPI telegramBotAPI = new TelegramBotAPI(telegram_bot_api_token.get(), telegram_bot_user_chat_id.get());
         telegramBotAPI.setContext(AndroidContext.getInstance().getApplicationContext());
         telegramBotAPI.sendMessageNotificationDisabled(String.format("/fix %s", ZonedDateTime.now().toOffsetDateTime()));
+    }
+
+    public static void clearLastTimestamps() {
+        PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
+
+        Gson gson = new Gson();
+
+        preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS,
+                gson.toJson(new Timestamps(){{setTimestamps(new LinkedList<>());}}));
+
+    }
+
+    private static <T> List<T> getLastElementsSubList(List<T> list, int elements) {
+        if (list.size() < elements) {
+            return list;
+        }
+        return list.subList(list.size()-elements, list.size());
     }
 }

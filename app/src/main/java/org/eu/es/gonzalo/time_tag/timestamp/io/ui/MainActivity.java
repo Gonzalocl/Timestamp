@@ -27,4 +27,8 @@ public class MainActivity extends Activity {
         startActivity(new Intent(this, PreferencesActivity.class));
     }
 
+    public void onClickClearLastTimestamps(View view) {
+        UiUtil.clearLastTimestamps();
+    }
+
 }

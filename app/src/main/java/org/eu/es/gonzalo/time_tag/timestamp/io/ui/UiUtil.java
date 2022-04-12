@@ -14,6 +14,7 @@ import org.eu.es.gonzalo.time_tag.timestamp.io.telegram.TelegramBotAPI;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -79,24 +80,36 @@ public class UiUtil {
         telegramBotAPI.setContext(AndroidContext.getInstance().getApplicationContext());
 
         String lastTimestamp = timestamps.getTimestamps().get(0).getTimestamp();
-        boolean anySent = false;
-        for (Timestamp timestamp : timestamps.getTimestamps()) {
-            if (!timestamp.isSent()) {
-                ZonedDateTime lastDate = ZonedDateTime.parse(lastTimestamp, format);
-                ZonedDateTime currentDate = ZonedDateTime.parse(timestamp.getTimestamp(), format);
-                telegramBotAPI.sendMessageNotificationDisabled(String.format("Elapsed: %s", Duration.between(lastDate, currentDate)));
-                telegramBotAPI.sendMessageNotificationDisabled(String.format("/fix %s", timestamp.getTimestamp()));
+        Iterator<Timestamp> it = timestamps.getTimestamps().iterator();
+        sendTimestamp(it, telegramBotAPI, lastTimestamp, step, end, timestamps);
+    }
 
-                anySent = true;
-            }
-            lastTimestamp = timestamp.getTimestamp();
+    private static void sendTimestamp(Iterator<Timestamp> it, TelegramBotAPI telegramBotAPI, String lastTimestamp, Consumer<Void> step, Consumer<Void> end, Timestamps timestamps) {
+        if (!it.hasNext()) {
+            end.accept(null);
         }
-
-        if (anySent) {
-            preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS,
-                    gson.toJson(new Timestamps(){{setTimestamps(getLastElementsSubList(timestamps.getTimestamps(), 25));}}));
-
+        Timestamp timestamp = it.next();
+        if (timestamp.isSent()) {
+            sendTimestamp(it, telegramBotAPI, timestamp.getTimestamp(), step, end, timestamps);
+            return;
         }
+        ZonedDateTime lastDate = ZonedDateTime.parse(lastTimestamp, format);
+        ZonedDateTime currentDate = ZonedDateTime.parse(timestamp.getTimestamp(), format);
+        telegramBotAPI.sendMessageNotificationDisabled(String.format("Elapsed: %s", Duration.between(lastDate, currentDate)), unused -> {
+            telegramBotAPI.sendMessageNotificationDisabled(String.format("/fix %s", timestamp.getTimestamp()), unused1 -> {
+                PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
+                Gson gson = new Gson();
+
+                timestamp.setSent(true);
+
+                preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS,
+                        gson.toJson(timestamps));
+
+                step.accept(null);
+                sendTimestamp(it, telegramBotAPI, timestamp.getTimestamp(), step, end, timestamps);
+            }, end);
+        }, end);
+
     }
 
     public static void clearLastTimestamps() {

@@ -11,6 +11,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.function.Consumer;
+
 public class TelegramBotAPI {
 
     private static final String TELEGRAM_BOT_API_URL = "https://api.telegram.org/bot";
@@ -23,6 +25,7 @@ public class TelegramBotAPI {
     private final String BOT_API_URL_SEND_MESSAGE;
 
     private Context context;
+    private RequestQueue requestQueue;
 
     public TelegramBotAPI(String botAPIToken, String botUserChatId) {
         BOT_API_TOKEN = botAPIToken;
@@ -34,8 +37,7 @@ public class TelegramBotAPI {
                 BOT_API_METHOD_SEND_MESSAGE);
     }
 
-    public void sendMessageNotificationDisabled(String message) {
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
+    public void sendMessageNotificationDisabled(String message, Consumer<Void> successCallBack, Consumer<Void> errorCallBack) {
         JSONObject jsonObject = new JSONObject() {{
             try {
                 put("chat_id", BOT_USER_CHAT_ID);
@@ -48,16 +50,16 @@ public class TelegramBotAPI {
         requestQueue.add(new JsonObjectRequest(Request.Method.POST,
                 BOT_API_URL_SEND_MESSAGE,
                 jsonObject,
-                response -> {
-                    Toast.makeText(context, response.toString().substring(0, 50), Toast.LENGTH_SHORT).show();
-                },
+                response -> successCallBack.accept(null),
                 error -> {
                     Toast.makeText(context, "ERROR: telegram bot api call", Toast.LENGTH_SHORT).show();
+                    errorCallBack.accept(null);
                 }));
 
     }
 
     public void setContext(Context context) {
         this.context = context;
+        requestQueue = Volley.newRequestQueue(context);
     }
 }

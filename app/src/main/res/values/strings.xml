@@ -3,4 +3,5 @@
     <string name="main_activity_timestamp_button">Timestamp</string>
     <string name="main_activity_configuration_button">Configuration</string>
     <string name="main_activity_clear_last_timestamps_button">Clear Timestamps</string>
+    <string name="main_activity_send_button">Send</string>
 </resources>

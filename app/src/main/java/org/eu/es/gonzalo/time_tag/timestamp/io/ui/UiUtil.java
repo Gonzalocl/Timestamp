@@ -46,7 +46,7 @@ public class UiUtil {
         sendTelegramBotMessageTimestamps(timestamps);
     }
 
-    private static void sendTelegramBotMessageTimestamps(List<Timestamp> timestamps) {
+    public static void sendTelegramBotMessageTimestamps(List<Timestamp> timestamps) {
 
         if (timestamps.isEmpty()) {
             Toast.makeText(AndroidContext.getInstance().getApplicationContext(), "INFO: No Timestamps to send", Toast.LENGTH_SHORT).show();

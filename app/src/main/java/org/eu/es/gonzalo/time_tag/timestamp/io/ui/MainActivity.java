@@ -39,8 +39,12 @@ public class MainActivity extends Activity {
         startActivity(new Intent(this, PreferencesActivity.class));
     }
 
-    public void onClickClearLastTimestamps(View view) {
+    public void onClickClearLastTimestampsButton(View view) {
         UiUtil.clearLastTimestamps();
+    }
+
+    public void onClickSendButton(View view) {
+        UiUtil.sendTelegramBotMessageTimestamps(null);
     }
 
 }

@@ -23,16 +23,12 @@ public class MainActivity extends Activity {
         ContextInitializer.initializeAllContexts(this);
         setContentView(R.layout.main_activity);
 
-        PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
-        Optional<String> last_timestamps = preferenceRepository.get(PreferenceRepository.Preference.LAST_TIMESTAMPS);
-        String timestampsText = last_timestamps.orElse("NO TIMESTAMPS");
-
-        TextView textView = findViewById(R.id.main_activity_text_view);
-        textView.setText(timestampsText);
+        updateMainTextView();
     }
 
     public void onClickTimestampButton(View view) {
         UiUtil.storeTimestamp();
+        updateMainTextView();
     }
 
     public void onClickConfigurationButton(View view) {
@@ -41,10 +37,22 @@ public class MainActivity extends Activity {
 
     public void onClickClearLastTimestampsButton(View view) {
         UiUtil.clearLastTimestamps();
+        updateMainTextView();
     }
 
     public void onClickSendButton(View view) {
+        // TODO disable button, update ui
         UiUtil.sendTelegramBotMessageTimestamps(null);
+    }
+
+    private void updateMainTextView() {
+        PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
+        Optional<String> last_timestamps = preferenceRepository.get(PreferenceRepository.Preference.LAST_TIMESTAMPS);
+
+        String timestampsText = last_timestamps.orElse("NO TIMESTAMPS");
+
+        TextView textView = findViewById(R.id.main_activity_text_view);
+        textView.setText(timestampsText);
     }
 
 }

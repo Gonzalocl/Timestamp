@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
     }
 
     public void onClickTimestampButton(View view) {
-        UiUtil.sendAndStoreTelegramBotMessageTimestamps();
+        UiUtil.storeTimestamp();
     }
 
     public void onClickConfigurationButton(View view) {

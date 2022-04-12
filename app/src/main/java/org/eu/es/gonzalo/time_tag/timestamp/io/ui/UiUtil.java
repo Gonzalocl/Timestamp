@@ -23,7 +23,7 @@ public class UiUtil {
     private static final int MAX_LAST_TIMESTAMPS = 25;
     private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
 
-    public static void sendAndStoreTelegramBotMessageTimestamps() {
+    public static void storeTimestamp() {
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
 
         Optional<String> last_timestamps = preferenceRepository.get(PreferenceRepository.Preference.LAST_TIMESTAMPS);
@@ -43,7 +43,6 @@ public class UiUtil {
         preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS,
                 gson.toJson(new Timestamps(){{setTimestamps(getLastElementsSubList(timestamps, MAX_LAST_TIMESTAMPS));}}));
 
-        sendTelegramBotMessageTimestamps(timestamps);
     }
 
     public static void sendTelegramBotMessageTimestamps(List<Timestamp> timestamps) {

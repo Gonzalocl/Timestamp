@@ -32,15 +32,15 @@ public class UiUtil {
         if (last_timestamps.isPresent()) {
             timestamps = gson.fromJson(last_timestamps.get(), Timestamps.class);
         } else {
-            timestamps = new Timestamps() {{
-                setTimestamps(new LinkedList<>());
-            }};
+            timestamps = new Timestamps();
+            timestamps.setTimestamps(new LinkedList<>());
         }
 
-        timestamps.getTimestamps().add(new Timestamp() {{
-            setTimestamp(ZonedDateTime.now().format(format));
-            setSent(false);
-        }});
+        Timestamp timestamp = new Timestamp();
+        timestamp.setTimestamp(ZonedDateTime.now().format(format));
+        timestamp.setSent(false);
+
+        timestamps.getTimestamps().add(timestamp);
         timestamps.setTimestamps(getLastElementsSubList(timestamps.getTimestamps(), MAX_LAST_TIMESTAMPS));
 
         preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS, gson.toJson(timestamps));

@@ -66,6 +66,7 @@ public class UiUtil {
         Timestamps timestamps;
         if (!last_timestamps.isPresent() || (timestamps = gson.fromJson(last_timestamps.get(), Timestamps.class)) == null || timestamps.getTimestamps().isEmpty()) {
             Toast.makeText(AndroidContext.getInstance().getApplicationContext(), "INFO: No Timestamps to send", Toast.LENGTH_SHORT).show();
+            end.accept(null);
             return;
         }
 
@@ -73,6 +74,7 @@ public class UiUtil {
         Optional<String> telegram_bot_user_chat_id = preferenceRepository.get(PreferenceRepository.Preference.TELEGRAM_BOT_USER_CHAT_ID);
         if (!(telegram_bot_api_token.isPresent() && telegram_bot_user_chat_id.isPresent())) {
             Toast.makeText(AndroidContext.getInstance().getApplicationContext(), "ERROR: token or chat id not present", Toast.LENGTH_SHORT).show();
+            end.accept(null);
             return;
         }
 

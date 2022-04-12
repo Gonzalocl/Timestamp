@@ -107,8 +107,11 @@ public class UiUtil {
 
         Gson gson = new Gson();
 
+        Timestamps emptyTimestamps = new Timestamps();
+        emptyTimestamps.setTimestamps(new LinkedList<>());
+
         preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS,
-                gson.toJson(new Timestamps(){{setTimestamps(new LinkedList<>());}}));
+                gson.toJson(emptyTimestamps));
 
     }
 

@@ -40,7 +40,7 @@ public class TelegramBotAPI {
             try {
                 put("chat_id", BOT_USER_CHAT_ID);
                 put("text", message);
-                put("disable_notification", false);
+                put("disable_notification", true);
             } catch (JSONException e) {
                 Toast.makeText(context, "JSON ERROR", Toast.LENGTH_SHORT).show();
             }

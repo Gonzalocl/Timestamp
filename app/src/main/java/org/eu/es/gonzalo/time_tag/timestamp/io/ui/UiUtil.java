@@ -20,14 +20,21 @@ import java.util.Optional;
 
 public class UiUtil {
 
-    private static final String DEFAULT_MAX_LAST_TIMESTAMPS = "25";
+    private static final String DEFAULT_MAX_LAST_TIMESTAMPS_STRING = "25";
+    private static final int DEFAULT_MAX_LAST_TIMESTAMPS_INT = 25;
     private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
 
     public static void storeTimestamp() {
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
         Optional<String> last_timestamps = preferenceRepository.get(PreferenceRepository.Preference.LAST_TIMESTAMPS);
         Optional<String> max_last_timestamps_string = preferenceRepository.get(PreferenceRepository.Preference.MAX_LAST_TIMESTAMPS);
-        int max_last_timestamps = Integer.parseInt(max_last_timestamps_string.orElse(DEFAULT_MAX_LAST_TIMESTAMPS));
+        int max_last_timestamps;
+        try {
+            max_last_timestamps = Integer.parseInt(max_last_timestamps_string.orElse(DEFAULT_MAX_LAST_TIMESTAMPS_STRING));
+        } catch (NumberFormatException e) {
+            Toast.makeText(AndroidContext.getInstance().getApplicationContext(), "ERROR: wrong MAX_LAST_TIMESTAMPS, using default " + DEFAULT_MAX_LAST_TIMESTAMPS_INT, Toast.LENGTH_SHORT).show();
+            max_last_timestamps = DEFAULT_MAX_LAST_TIMESTAMPS_INT;
+        }
 
         Gson gson = new Gson();
         Timestamps timestamps;

@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class UiUtil {
 
@@ -54,14 +55,19 @@ public class UiUtil {
 
     }
 
-    public static void sendTelegramBotMessageTimestamps(List<Timestamp> timestamps) {
+    public static void sendTelegramBotMessageTimestamps(Consumer<Void> step, Consumer<Void> end) {
 
-        if (timestamps.isEmpty()) {
+        PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
+        Gson gson = new Gson();
+
+        Optional<String> last_timestamps = preferenceRepository.get(PreferenceRepository.Preference.LAST_TIMESTAMPS);
+
+        Timestamps timestamps;
+        if (!last_timestamps.isPresent() || (timestamps = gson.fromJson(last_timestamps.get(), Timestamps.class)) == null || timestamps.getTimestamps().isEmpty()) {
             Toast.makeText(AndroidContext.getInstance().getApplicationContext(), "INFO: No Timestamps to send", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
         Optional<String> telegram_bot_api_token = preferenceRepository.get(PreferenceRepository.Preference.TELEGRAM_BOT_API_TOKEN);
         Optional<String> telegram_bot_user_chat_id = preferenceRepository.get(PreferenceRepository.Preference.TELEGRAM_BOT_USER_CHAT_ID);
         if (!(telegram_bot_api_token.isPresent() && telegram_bot_user_chat_id.isPresent())) {
@@ -72,9 +78,9 @@ public class UiUtil {
         TelegramBotAPI telegramBotAPI = new TelegramBotAPI(telegram_bot_api_token.get(), telegram_bot_user_chat_id.get());
         telegramBotAPI.setContext(AndroidContext.getInstance().getApplicationContext());
 
-        String lastTimestamp = timestamps.get(0).getTimestamp();
+        String lastTimestamp = timestamps.getTimestamps().get(0).getTimestamp();
         boolean anySent = false;
-        for (Timestamp timestamp : timestamps) {
+        for (Timestamp timestamp : timestamps.getTimestamps()) {
             if (!timestamp.isSent()) {
                 ZonedDateTime lastDate = ZonedDateTime.parse(lastTimestamp, format);
                 ZonedDateTime currentDate = ZonedDateTime.parse(timestamp.getTimestamp(), format);
@@ -87,9 +93,8 @@ public class UiUtil {
         }
 
         if (anySent) {
-            Gson gson = new Gson();
             preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS,
-                    gson.toJson(new Timestamps(){{setTimestamps(getLastElementsSubList(timestamps, 25));}}));
+                    gson.toJson(new Timestamps(){{setTimestamps(getLastElementsSubList(timestamps.getTimestamps(), 25));}}));
 
         }
     }

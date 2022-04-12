@@ -28,20 +28,22 @@ public class UiUtil {
 
         Optional<String> last_timestamps = preferenceRepository.get(PreferenceRepository.Preference.LAST_TIMESTAMPS);
         Gson gson = new Gson();
-        List<Timestamp> timestamps;
+        Timestamps timestamps;
         if (last_timestamps.isPresent()) {
-            timestamps = gson.fromJson(last_timestamps.get(), Timestamps.class).getTimestamps();
+            timestamps = gson.fromJson(last_timestamps.get(), Timestamps.class);
         } else {
-            timestamps = new LinkedList<>();
+            timestamps = new Timestamps() {{
+                setTimestamps(new LinkedList<>());
+            }};
         }
 
-        timestamps.add(new Timestamp() {{
+        timestamps.getTimestamps().add(new Timestamp() {{
             setTimestamp(ZonedDateTime.now().format(format));
             setSent(false);
         }});
+        timestamps.setTimestamps(getLastElementsSubList(timestamps.getTimestamps(), MAX_LAST_TIMESTAMPS));
 
-        preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS,
-                gson.toJson(new Timestamps(){{setTimestamps(getLastElementsSubList(timestamps, MAX_LAST_TIMESTAMPS));}}));
+        preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS, gson.toJson(timestamps));
 
     }
 

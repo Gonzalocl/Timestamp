@@ -99,7 +99,7 @@ public class UiUtil {
         ZonedDateTime lastDate = ZonedDateTime.parse(lastTimestamp, format);
         ZonedDateTime currentDate = ZonedDateTime.parse(timestamp.getTimestamp(), format);
         Duration elapsed = Duration.between(lastDate, currentDate);
-        String elapsedMessage = String.format("Elapsed: %dh %02dmin", elapsed.toHours(), elapsed.minusHours(elapsed.toHours()).toMinutes());
+        String elapsedMessage = String.format("%dh %02dm", elapsed.toHours(), elapsed.minusHours(elapsed.toHours()).toMinutes());
         telegramBotAPI.sendMessageNotificationDisabled(elapsedMessage, unused -> {
             telegramBotAPI.sendMessageNotificationDisabled(String.format("/fix %s", timestamp.getTimestamp()), unused1 -> {
                 PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();

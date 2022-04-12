@@ -1,6 +1,5 @@
 <?xml version ="1.0" encoding ="utf-8"?>
 <PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <EditTextPreference
@@ -14,7 +13,6 @@
     <EditTextPreference
         app:key="max_last_timestamps"
         app:title="Max last timestamps"
-        android:inputType="number"
         app:defaultValue="25"/>
 
 </PreferenceScreen>

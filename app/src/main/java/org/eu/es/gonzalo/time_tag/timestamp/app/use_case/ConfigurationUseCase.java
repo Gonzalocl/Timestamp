@@ -16,6 +16,7 @@ public class ConfigurationUseCase {
         configurationController = new ConfigurationController(configurationRepository);
     }
 
+    // TODO is right to use consumer? does consumer launch a thread
     public void get(Consumer<Map<String, String>> success, Consumer<Throwable> error) {
         configurationController.getConfiguration(configuration -> success.accept(configuration.getSettings()), error);
     }

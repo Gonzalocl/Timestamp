@@ -1,13 +1,9 @@
 package org.eu.es.gonzalo.time_tag.timestamp.io.ui;
 
-import android.app.Activity;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import org.eu.es.gonzalo.time_tag.timestamp.R;
 import org.eu.es.gonzalo.time_tag.timestamp.app.configuration.PreferenceConfiguration;
 import org.eu.es.gonzalo.time_tag.timestamp.app.repository.PreferenceRepository;
 import org.eu.es.gonzalo.time_tag.timestamp.io.context.AndroidContext;
@@ -26,18 +22,6 @@ public class UiUtil {
 
     private static final int MAX_LAST_TIMESTAMPS = 25;
     private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
-
-    public static void setErrorView(Activity activity, String message) {
-
-        activity.setContentView(R.layout.error_view);
-
-        TextView errorTextView = activity.findViewById(R.id.error_view_error_text_view);
-        errorTextView.setText(message);
-
-        Button closeButton = activity.findViewById(R.id.error_view_close_button);
-        closeButton.setOnClickListener(view -> activity.finish());
-
-    }
 
     public static void sendAndStoreTelegramBotMessageTimestamps() {
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();

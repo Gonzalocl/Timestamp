@@ -31,7 +31,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".io.ui.ConfigurationActivity"/>
         <activity android:name=".io.ui.PreferencesActivity"/>
 
     </application>

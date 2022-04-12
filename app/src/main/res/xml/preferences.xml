@@ -1,5 +1,6 @@
 <?xml version ="1.0" encoding ="utf-8"?>
 <PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <EditTextPreference
@@ -9,5 +10,11 @@
     <EditTextPreference
         app:key="telegram_bot_user_chat_id"
         app:title="Telegram bot user chat id"/>
+
+    <EditTextPreference
+        app:key="max_last_timestamps"
+        app:title="Max last timestamps"
+        android:inputType="number"
+        app:defaultValue="25"/>
 
 </PreferenceScreen>

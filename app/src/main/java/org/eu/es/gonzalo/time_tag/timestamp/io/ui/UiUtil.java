@@ -20,18 +20,18 @@ import java.util.Optional;
 
 public class UiUtil {
 
-    private static final int MAX_LAST_TIMESTAMPS = 25;
+    private static final String DEFAULT_MAX_LAST_TIMESTAMPS = "25";
     private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
 
     public static void storeTimestamp() {
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
-
         Optional<String> last_timestamps = preferenceRepository.get(PreferenceRepository.Preference.LAST_TIMESTAMPS);
+        Optional<String> max_last_timestamps_string = preferenceRepository.get(PreferenceRepository.Preference.MAX_LAST_TIMESTAMPS);
+        int max_last_timestamps = Integer.parseInt(max_last_timestamps_string.orElse(DEFAULT_MAX_LAST_TIMESTAMPS));
+
         Gson gson = new Gson();
         Timestamps timestamps;
-        if (last_timestamps.isPresent()) {
-            timestamps = gson.fromJson(last_timestamps.get(), Timestamps.class);
-        } else {
+        if (!last_timestamps.isPresent() || (timestamps = gson.fromJson(last_timestamps.get(), Timestamps.class)) == null) {
             timestamps = new Timestamps();
             timestamps.setTimestamps(new LinkedList<>());
         }
@@ -41,7 +41,7 @@ public class UiUtil {
         timestamp.setSent(false);
 
         timestamps.getTimestamps().add(timestamp);
-        timestamps.setTimestamps(getLastElementsSubList(timestamps.getTimestamps(), MAX_LAST_TIMESTAMPS));
+        timestamps.setTimestamps(getLastElementsSubList(timestamps.getTimestamps(), max_last_timestamps));
 
         preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS, gson.toJson(timestamps));
 
@@ -82,7 +82,7 @@ public class UiUtil {
         if (anySent) {
             Gson gson = new Gson();
             preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS,
-                    gson.toJson(new Timestamps(){{setTimestamps(getLastElementsSubList(timestamps, MAX_LAST_TIMESTAMPS));}}));
+                    gson.toJson(new Timestamps(){{setTimestamps(getLastElementsSubList(timestamps, 25));}}));
 
         }
     }

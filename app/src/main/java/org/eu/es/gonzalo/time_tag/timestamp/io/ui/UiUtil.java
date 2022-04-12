@@ -89,6 +89,7 @@ public class UiUtil {
     private static void sendTimestamp(Iterator<Timestamp> it, TelegramBotAPI telegramBotAPI, String lastTimestamp, Consumer<Void> step, Consumer<Void> end, Timestamps timestamps) {
         if (!it.hasNext()) {
             end.accept(null);
+            return;
         }
         Timestamp timestamp = it.next();
         if (timestamp.isSent()) {

@@ -4,6 +4,7 @@ import java.util.Optional;
 
 public interface PreferenceRepository {
     Optional<String> get(String preference);
+    Optional<Long> getLong(String preference);
     void set(String preference, String value);
 
     class Preference {

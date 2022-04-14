@@ -15,6 +15,13 @@ public class SharedPreferenceRepository implements PreferenceRepository {
     }
 
     @Override
+    public Optional<Long> getLong(String preference) {
+        SharedPreferences sharedPreferences = SharedPreferencesContext.getInstance().getSharedPreferences();
+        long value = sharedPreferences.getLong(preference, Long.MAX_VALUE);
+        return Optional.ofNullable(value == Long.MAX_VALUE ? null : value);
+    }
+
+    @Override
     public void set(String preference, String value) {
         SharedPreferences sharedPreferences = SharedPreferencesContext.getInstance().getSharedPreferences();
         sharedPreferences.edit().putString(preference, value).apply();

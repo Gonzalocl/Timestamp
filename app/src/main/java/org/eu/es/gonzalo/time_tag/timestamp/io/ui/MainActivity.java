@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
 
     private void updateMainTextView() {
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
-        Optional<String> last_timestamps = preferenceRepository.get(PreferenceRepository.Preference.LAST_TIMESTAMPS);
+        Optional<String> last_timestamps = preferenceRepository.getString(PreferenceRepository.Preference.LAST_TIMESTAMPS);
 
         String timestampsText;
         Gson gson = new Gson();

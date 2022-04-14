@@ -4,10 +4,9 @@ import java.util.Optional;
 
 public interface PreferenceRepository {
 
-    // TODO change to getString
-    Optional<String> get(String preference);
+    Optional<String> getString(String preference);
     Optional<Long> getLong(String preference);
-    void set(String preference, String value);
+    void setString(String preference, String value);
 
     class Preference {
         // TODO should use common reference

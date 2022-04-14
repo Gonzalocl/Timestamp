@@ -32,9 +32,9 @@ public class UiUtil {
 
     public static void storeTimestamp() {
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
-        Optional<String> last_timestamps = preferenceRepository.get(PreferenceRepository.Preference.LAST_TIMESTAMPS);
+        Optional<String> last_timestamps = preferenceRepository.getString(PreferenceRepository.Preference.LAST_TIMESTAMPS);
         // TODO use getLong
-        Optional<String> max_last_timestamps_string = preferenceRepository.get(PreferenceRepository.Preference.MAX_LAST_TIMESTAMPS);
+        Optional<String> max_last_timestamps_string = preferenceRepository.getString(PreferenceRepository.Preference.MAX_LAST_TIMESTAMPS);
         int max_last_timestamps;
         try {
             max_last_timestamps = Integer.parseInt(max_last_timestamps_string.orElse(DEFAULT_MAX_LAST_TIMESTAMPS_STRING));
@@ -57,7 +57,7 @@ public class UiUtil {
         timestamps.getTimestamps().add(timestamp);
         timestamps.setTimestamps(getLastElementsSubList(timestamps.getTimestamps(), max_last_timestamps));
 
-        preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS, gson.toJson(timestamps));
+        preferenceRepository.setString(PreferenceRepository.Preference.LAST_TIMESTAMPS, gson.toJson(timestamps));
 
     }
 
@@ -66,7 +66,7 @@ public class UiUtil {
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
         Gson gson = new Gson();
 
-        Optional<String> last_timestamps = preferenceRepository.get(PreferenceRepository.Preference.LAST_TIMESTAMPS);
+        Optional<String> last_timestamps = preferenceRepository.getString(PreferenceRepository.Preference.LAST_TIMESTAMPS);
 
         Timestamps timestamps;
         if (!last_timestamps.isPresent() || (timestamps = gson.fromJson(last_timestamps.get(), Timestamps.class)) == null || timestamps.getTimestamps().isEmpty()) {
@@ -75,8 +75,8 @@ public class UiUtil {
             return;
         }
 
-        Optional<String> telegram_bot_api_token = preferenceRepository.get(PreferenceRepository.Preference.TELEGRAM_BOT_API_TOKEN);
-        Optional<String> telegram_bot_user_chat_id = preferenceRepository.get(PreferenceRepository.Preference.TELEGRAM_BOT_USER_CHAT_ID);
+        Optional<String> telegram_bot_api_token = preferenceRepository.getString(PreferenceRepository.Preference.TELEGRAM_BOT_API_TOKEN);
+        Optional<String> telegram_bot_user_chat_id = preferenceRepository.getString(PreferenceRepository.Preference.TELEGRAM_BOT_USER_CHAT_ID);
         if (!(telegram_bot_api_token.isPresent() && telegram_bot_user_chat_id.isPresent())) {
             Toast.makeText(AndroidContext.getInstance().getApplicationContext(), "ERROR: token or chat id not present", Toast.LENGTH_SHORT).show();
             end.accept(null);
@@ -114,7 +114,7 @@ public class UiUtil {
 
             timestamp.setSent(true);
 
-            preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS,
+            preferenceRepository.setString(PreferenceRepository.Preference.LAST_TIMESTAMPS,
                     gson.toJson(timestamps));
 
             step.accept(null);
@@ -131,7 +131,7 @@ public class UiUtil {
         Timestamps emptyTimestamps = new Timestamps();
         emptyTimestamps.setTimestamps(new LinkedList<>());
 
-        preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS,
+        preferenceRepository.setString(PreferenceRepository.Preference.LAST_TIMESTAMPS,
                 gson.toJson(emptyTimestamps));
 
     }

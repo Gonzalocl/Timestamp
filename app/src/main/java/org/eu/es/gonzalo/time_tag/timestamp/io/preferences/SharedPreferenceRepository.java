@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class SharedPreferenceRepository implements PreferenceRepository {
     @Override
-    public Optional<String> get(String preference) {
+    public Optional<String> getString(String preference) {
         SharedPreferences sharedPreferences = SharedPreferencesContext.getInstance().getSharedPreferences();
         return Optional.ofNullable(sharedPreferences.getString(preference, null));
     }
@@ -22,7 +22,7 @@ public class SharedPreferenceRepository implements PreferenceRepository {
     }
 
     @Override
-    public void set(String preference, String value) {
+    public void setString(String preference, String value) {
         SharedPreferences sharedPreferences = SharedPreferencesContext.getInstance().getSharedPreferences();
         sharedPreferences.edit().putString(preference, value).apply();
     }

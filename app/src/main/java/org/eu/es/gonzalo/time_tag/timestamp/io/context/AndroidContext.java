@@ -1,6 +1,7 @@
 package org.eu.es.gonzalo.time_tag.timestamp.io.context;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 import org.eu.es.gonzalo.time_tag.timestamp.io.context.exception.AndroidContextNotInitializedException;
 
@@ -29,5 +30,13 @@ public class AndroidContext {
 
     public Context getApplicationContext() {
         return applicationContext;
+    }
+
+    public Resources getResources() {
+        return getApplicationContext().getResources();
+    }
+
+    public int getInteger(int id) {
+        return getResources().getInteger(id);
     }
 }

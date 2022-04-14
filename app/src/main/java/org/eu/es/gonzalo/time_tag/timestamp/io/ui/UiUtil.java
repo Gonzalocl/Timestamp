@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.eu.es.gonzalo.time_tag.timestamp.R;
 import org.eu.es.gonzalo.time_tag.timestamp.app.configuration.PreferenceConfiguration;
 import org.eu.es.gonzalo.time_tag.timestamp.app.repository.PreferenceRepository;
 import org.eu.es.gonzalo.time_tag.timestamp.io.context.AndroidContext;
@@ -23,16 +24,13 @@ import java.util.Optional;
 
 public class UiUtil {
 
-    // TODO defaults should use a common reference
-    private static final long DEFAULT_MAX_LAST_TIMESTAMPS = 25;
-    private static final long DEFAULT_TELEGRAM_BOT_DELAY_MILLISECONDS = 500;
     private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
 
     public static void storeTimestamp() {
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
         Optional<String> last_timestamps = preferenceRepository.getString(PreferenceRepository.Preference.LAST_TIMESTAMPS);
         long max_last_timestamps = preferenceRepository.getLong(PreferenceRepository.Preference.MAX_LAST_TIMESTAMPS)
-                .orElse(DEFAULT_MAX_LAST_TIMESTAMPS);
+                .orElse((long) AndroidContext.getInstance().getInteger(R.integer.max_last_timestamps));
 
         Gson gson = new Gson();
         Timestamps timestamps;
@@ -54,6 +52,7 @@ public class UiUtil {
 
     public static void sendTelegramBotMessageTimestamps(Runnable step, Runnable end) {
 
+        AndroidContext androidContext = AndroidContext.getInstance();
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
         Gson gson = new Gson();
 
@@ -61,7 +60,7 @@ public class UiUtil {
 
         Timestamps timestamps;
         if (!last_timestamps.isPresent() || (timestamps = gson.fromJson(last_timestamps.get(), Timestamps.class)) == null || timestamps.getTimestamps().isEmpty()) {
-            Toast.makeText(AndroidContext.getInstance().getApplicationContext(), "INFO: No Timestamps to send", Toast.LENGTH_SHORT).show();
+            Toast.makeText(androidContext.getApplicationContext(), "INFO: No Timestamps to send", Toast.LENGTH_SHORT).show();
             end.run();
             return;
         }
@@ -69,16 +68,16 @@ public class UiUtil {
         Optional<String> telegram_bot_api_token = preferenceRepository.getString(PreferenceRepository.Preference.TELEGRAM_BOT_API_TOKEN);
         Optional<String> telegram_bot_user_chat_id = preferenceRepository.getString(PreferenceRepository.Preference.TELEGRAM_BOT_USER_CHAT_ID);
         if (!(telegram_bot_api_token.isPresent() && telegram_bot_user_chat_id.isPresent())) {
-            Toast.makeText(AndroidContext.getInstance().getApplicationContext(), "ERROR: token or chat id not present", Toast.LENGTH_SHORT).show();
+            Toast.makeText(androidContext.getApplicationContext(), "ERROR: token or chat id not present", Toast.LENGTH_SHORT).show();
             end.run();
             return;
         }
 
         long telegram_bot_delay_milliseconds = preferenceRepository.getLong(PreferenceRepository.Preference.TELEGRAM_BOT_DELAY_MILLISECONDS)
-                .orElse(DEFAULT_TELEGRAM_BOT_DELAY_MILLISECONDS);
+                .orElse((long) androidContext.getInteger(R.integer.telegram_bot_delay_milliseconds));
 
         TelegramBotAPI telegramBotAPI = new TelegramBotAPI(telegram_bot_api_token.get(), telegram_bot_user_chat_id.get());
-        telegramBotAPI.setContext(AndroidContext.getInstance().getApplicationContext());
+        telegramBotAPI.setContext(androidContext.getApplicationContext());
 
         String lastTimestamp = timestamps.getTimestamps().get(0).getTimestamp();
         Iterator<Timestamp> it = timestamps.getTimestamps().iterator();

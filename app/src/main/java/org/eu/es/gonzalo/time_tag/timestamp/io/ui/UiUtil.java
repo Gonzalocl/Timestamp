@@ -25,6 +25,7 @@ public class UiUtil {
     // TODO defaults should use a common reference
     private static final String DEFAULT_MAX_LAST_TIMESTAMPS_STRING = "25";
     private static final int DEFAULT_MAX_LAST_TIMESTAMPS_INT = 25;
+    private static final long DEFAULT_TELEGRAM_BOT_DELAY_MILLISECONDS = 500;
     private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
 
     public static void storeTimestamp() {
@@ -80,22 +81,25 @@ public class UiUtil {
             return;
         }
 
+        long telegram_bot_delay_milliseconds = preferenceRepository.getLong(PreferenceRepository.Preference.TELEGRAM_BOT_DELAY_MILLISECONDS)
+                .orElse(DEFAULT_TELEGRAM_BOT_DELAY_MILLISECONDS);
+
         TelegramBotAPI telegramBotAPI = new TelegramBotAPI(telegram_bot_api_token.get(), telegram_bot_user_chat_id.get());
         telegramBotAPI.setContext(AndroidContext.getInstance().getApplicationContext());
 
         String lastTimestamp = timestamps.getTimestamps().get(0).getTimestamp();
         Iterator<Timestamp> it = timestamps.getTimestamps().iterator();
-        sendTimestamp(it, telegramBotAPI, lastTimestamp, step, end, timestamps);
+        sendTimestamp(it, telegramBotAPI, lastTimestamp, step, end, timestamps, telegram_bot_delay_milliseconds);
     }
 
-    private static void sendTimestamp(Iterator<Timestamp> it, TelegramBotAPI telegramBotAPI, String lastTimestamp, Consumer<Void> step, Consumer<Void> end, Timestamps timestamps) {
+    private static void sendTimestamp(Iterator<Timestamp> it, TelegramBotAPI telegramBotAPI, String lastTimestamp, Consumer<Void> step, Consumer<Void> end, Timestamps timestamps, long delay) {
         if (!it.hasNext()) {
             end.accept(null);
             return;
         }
         Timestamp timestamp = it.next();
         if (timestamp.isSent()) {
-            sendTimestamp(it, telegramBotAPI, timestamp.getTimestamp(), step, end, timestamps);
+            sendTimestamp(it, telegramBotAPI, timestamp.getTimestamp(), step, end, timestamps, delay);
             return;
         }
         ZonedDateTime lastDate = ZonedDateTime.parse(lastTimestamp, format);
@@ -113,7 +117,7 @@ public class UiUtil {
                         gson.toJson(timestamps));
 
                 step.accept(null);
-                sendTimestamp(it, telegramBotAPI, timestamp.getTimestamp(), step, end, timestamps);
+                sendTimestamp(it, telegramBotAPI, timestamp.getTimestamp(), step, end, timestamps, delay);
             }, end);
         }, end);
 

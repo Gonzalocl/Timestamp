@@ -108,20 +108,18 @@ public class UiUtil {
         ZonedDateTime currentDate = ZonedDateTime.parse(timestamp.getTimestamp(), format);
         Duration elapsed = Duration.between(lastDate, currentDate);
         String elapsedMessage = String.format("%dh %02dm", elapsed.toHours(), elapsed.minusHours(elapsed.toHours()).toMinutes());
-        telegramBotAPI.sendMessageNotificationDisabled(elapsedMessage, unused -> {
-            new Handler(Looper.getMainLooper()).postDelayed(() -> telegramBotAPI.sendMessageNotificationDisabled(String.format("/fix %s", timestamp.getTimestamp()), unused1 -> {
-                PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
-                Gson gson = new Gson();
+        telegramBotAPI.sendMessageNotificationDisabled(elapsedMessage, unused -> new Handler(Looper.getMainLooper()).postDelayed(() -> telegramBotAPI.sendMessageNotificationDisabled(String.format("/fix %s", timestamp.getTimestamp()), unused1 -> {
+            PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
+            Gson gson = new Gson();
 
-                timestamp.setSent(true);
+            timestamp.setSent(true);
 
-                preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS,
-                        gson.toJson(timestamps));
+            preferenceRepository.set(PreferenceRepository.Preference.LAST_TIMESTAMPS,
+                    gson.toJson(timestamps));
 
-                step.accept(null);
-                new Handler(Looper.getMainLooper()).postDelayed(() -> sendTimestamp(it, telegramBotAPI, timestamp.getTimestamp(), step, end, timestamps, delay), delay);
-            }, end), delay);
-        }, end);
+            step.accept(null);
+            new Handler(Looper.getMainLooper()).postDelayed(() -> sendTimestamp(it, telegramBotAPI, timestamp.getTimestamp(), step, end, timestamps, delay), delay);
+        }, end), delay), end);
 
     }
 

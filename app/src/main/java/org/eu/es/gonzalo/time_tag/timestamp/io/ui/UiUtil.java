@@ -22,6 +22,7 @@ import java.util.function.Consumer;
 
 public class UiUtil {
 
+    // TODO defaults should use a common reference
     private static final String DEFAULT_MAX_LAST_TIMESTAMPS_STRING = "25";
     private static final int DEFAULT_MAX_LAST_TIMESTAMPS_INT = 25;
     private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");

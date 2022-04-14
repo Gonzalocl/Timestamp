@@ -1,5 +1,7 @@
 package org.eu.es.gonzalo.time_tag.timestamp.io.ui;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -107,7 +109,7 @@ public class UiUtil {
         Duration elapsed = Duration.between(lastDate, currentDate);
         String elapsedMessage = String.format("%dh %02dm", elapsed.toHours(), elapsed.minusHours(elapsed.toHours()).toMinutes());
         telegramBotAPI.sendMessageNotificationDisabled(elapsedMessage, unused -> {
-            telegramBotAPI.sendMessageNotificationDisabled(String.format("/fix %s", timestamp.getTimestamp()), unused1 -> {
+            new Handler(Looper.getMainLooper()).postDelayed(() -> telegramBotAPI.sendMessageNotificationDisabled(String.format("/fix %s", timestamp.getTimestamp()), unused1 -> {
                 PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
                 Gson gson = new Gson();
 
@@ -117,8 +119,8 @@ public class UiUtil {
                         gson.toJson(timestamps));
 
                 step.accept(null);
-                sendTimestamp(it, telegramBotAPI, timestamp.getTimestamp(), step, end, timestamps, delay);
-            }, end);
+                new Handler(Looper.getMainLooper()).postDelayed(() -> sendTimestamp(it, telegramBotAPI, timestamp.getTimestamp(), step, end, timestamps, delay), delay);
+            }, end), delay);
         }, end);
 
     }

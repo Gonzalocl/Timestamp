@@ -30,6 +30,7 @@ public class UiUtil {
     public static void storeTimestamp() {
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
         Optional<String> last_timestamps = preferenceRepository.get(PreferenceRepository.Preference.LAST_TIMESTAMPS);
+        // TODO use getLong
         Optional<String> max_last_timestamps_string = preferenceRepository.get(PreferenceRepository.Preference.MAX_LAST_TIMESTAMPS);
         int max_last_timestamps;
         try {

@@ -15,6 +15,7 @@
         app:title="Telegram bot delay milliseconds"
         app:defaultValue="500"/>
 
+<!--    TODO change to Number-->
     <EditTextPreference
         app:key="max_last_timestamps"
         app:title="Max last timestamps"

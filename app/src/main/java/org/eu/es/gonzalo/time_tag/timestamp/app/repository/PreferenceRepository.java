@@ -3,6 +3,8 @@ package org.eu.es.gonzalo.time_tag.timestamp.app.repository;
 import java.util.Optional;
 
 public interface PreferenceRepository {
+
+    // TODO change to getString
     Optional<String> get(String preference);
     Optional<Long> getLong(String preference);
     void set(String preference, String value);

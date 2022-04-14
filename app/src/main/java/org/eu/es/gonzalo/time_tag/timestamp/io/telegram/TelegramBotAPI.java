@@ -37,6 +37,7 @@ public class TelegramBotAPI {
                 BOT_API_METHOD_SEND_MESSAGE);
     }
 
+    // TODO use runnable
     public void sendMessageNotificationDisabled(String message, Consumer<Void> successCallBack, Consumer<Void> errorCallBack) {
         JSONObject jsonObject = new JSONObject() {{
             try {

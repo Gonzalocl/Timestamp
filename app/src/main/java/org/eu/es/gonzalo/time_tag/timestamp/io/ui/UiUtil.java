@@ -20,7 +20,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 public class UiUtil {
 
@@ -53,7 +52,7 @@ public class UiUtil {
 
     }
 
-    public static void sendTelegramBotMessageTimestamps(Consumer<Void> step, Consumer<Void> end) {
+    public static void sendTelegramBotMessageTimestamps(Runnable step, Runnable end) {
 
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
         Gson gson = new Gson();
@@ -63,7 +62,7 @@ public class UiUtil {
         Timestamps timestamps;
         if (!last_timestamps.isPresent() || (timestamps = gson.fromJson(last_timestamps.get(), Timestamps.class)) == null || timestamps.getTimestamps().isEmpty()) {
             Toast.makeText(AndroidContext.getInstance().getApplicationContext(), "INFO: No Timestamps to send", Toast.LENGTH_SHORT).show();
-            end.accept(null);
+            end.run();
             return;
         }
 
@@ -71,7 +70,7 @@ public class UiUtil {
         Optional<String> telegram_bot_user_chat_id = preferenceRepository.getString(PreferenceRepository.Preference.TELEGRAM_BOT_USER_CHAT_ID);
         if (!(telegram_bot_api_token.isPresent() && telegram_bot_user_chat_id.isPresent())) {
             Toast.makeText(AndroidContext.getInstance().getApplicationContext(), "ERROR: token or chat id not present", Toast.LENGTH_SHORT).show();
-            end.accept(null);
+            end.run();
             return;
         }
 
@@ -86,9 +85,9 @@ public class UiUtil {
         sendTimestamp(it, telegramBotAPI, lastTimestamp, step, end, timestamps, telegram_bot_delay_milliseconds);
     }
 
-    private static void sendTimestamp(Iterator<Timestamp> it, TelegramBotAPI telegramBotAPI, String lastTimestamp, Consumer<Void> step, Consumer<Void> end, Timestamps timestamps, long delay) {
+    private static void sendTimestamp(Iterator<Timestamp> it, TelegramBotAPI telegramBotAPI, String lastTimestamp, Runnable step, Runnable end, Timestamps timestamps, long delay) {
         if (!it.hasNext()) {
-            end.accept(null);
+            end.run();
             return;
         }
         Timestamp timestamp = it.next();
@@ -100,7 +99,7 @@ public class UiUtil {
         ZonedDateTime currentDate = ZonedDateTime.parse(timestamp.getTimestamp(), format);
         Duration elapsed = Duration.between(lastDate, currentDate);
         String elapsedMessage = String.format("%dh %02dm", elapsed.toHours(), elapsed.minusHours(elapsed.toHours()).toMinutes());
-        telegramBotAPI.sendMessageNotificationDisabled(elapsedMessage, unused -> new Handler(Looper.getMainLooper()).postDelayed(() -> telegramBotAPI.sendMessageNotificationDisabled(String.format("/fix %s", timestamp.getTimestamp()), unused1 -> {
+        telegramBotAPI.sendMessageNotificationDisabled(elapsedMessage, () -> new Handler(Looper.getMainLooper()).postDelayed(() -> telegramBotAPI.sendMessageNotificationDisabled(String.format("/fix %s", timestamp.getTimestamp()), () -> {
             PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
             Gson gson = new Gson();
 
@@ -109,7 +108,7 @@ public class UiUtil {
             preferenceRepository.setString(PreferenceRepository.Preference.LAST_TIMESTAMPS,
                     gson.toJson(timestamps));
 
-            step.accept(null);
+            step.run();
             new Handler(Looper.getMainLooper()).postDelayed(() -> sendTimestamp(it, telegramBotAPI, timestamp.getTimestamp(), step, end, timestamps, delay), delay);
         }, end), delay), end);
 

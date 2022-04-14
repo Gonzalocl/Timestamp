@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
     public void onClickSendButton(View view) {
         Button sendButton = (Button) view;
         sendButton.setEnabled(false);
-        UiUtil.sendTelegramBotMessageTimestamps(unused -> updateMainTextView(), unused -> sendButton.setEnabled(true));
+        UiUtil.sendTelegramBotMessageTimestamps(this::updateMainTextView, () -> sendButton.setEnabled(true));
     }
 
     private void updateMainTextView() {

@@ -25,23 +25,15 @@ import java.util.function.Consumer;
 public class UiUtil {
 
     // TODO defaults should use a common reference
-    private static final String DEFAULT_MAX_LAST_TIMESTAMPS_STRING = "25";
-    private static final int DEFAULT_MAX_LAST_TIMESTAMPS_INT = 25;
+    private static final long DEFAULT_MAX_LAST_TIMESTAMPS = 25;
     private static final long DEFAULT_TELEGRAM_BOT_DELAY_MILLISECONDS = 500;
     private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
 
     public static void storeTimestamp() {
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
         Optional<String> last_timestamps = preferenceRepository.getString(PreferenceRepository.Preference.LAST_TIMESTAMPS);
-        // TODO use getLong
-        Optional<String> max_last_timestamps_string = preferenceRepository.getString(PreferenceRepository.Preference.MAX_LAST_TIMESTAMPS);
-        int max_last_timestamps;
-        try {
-            max_last_timestamps = Integer.parseInt(max_last_timestamps_string.orElse(DEFAULT_MAX_LAST_TIMESTAMPS_STRING));
-        } catch (NumberFormatException e) {
-            Toast.makeText(AndroidContext.getInstance().getApplicationContext(), "ERROR: wrong MAX_LAST_TIMESTAMPS, using default " + DEFAULT_MAX_LAST_TIMESTAMPS_INT, Toast.LENGTH_SHORT).show();
-            max_last_timestamps = DEFAULT_MAX_LAST_TIMESTAMPS_INT;
-        }
+        long max_last_timestamps = preferenceRepository.getLong(PreferenceRepository.Preference.MAX_LAST_TIMESTAMPS)
+                .orElse(DEFAULT_MAX_LAST_TIMESTAMPS);
 
         Gson gson = new Gson();
         Timestamps timestamps;
@@ -55,7 +47,7 @@ public class UiUtil {
         timestamp.setSent(false);
 
         timestamps.getTimestamps().add(timestamp);
-        timestamps.setTimestamps(getLastElementsSubList(timestamps.getTimestamps(), max_last_timestamps));
+        timestamps.setTimestamps(getLastElementsSubList(timestamps.getTimestamps(), (int) max_last_timestamps));
 
         preferenceRepository.setString(PreferenceRepository.Preference.LAST_TIMESTAMPS, gson.toJson(timestamps));
 

@@ -18,6 +18,7 @@ import org.eu.es.gonzalo.time_tag.timestamp.io.context.ContextInitializer;
 import org.eu.es.gonzalo.time_tag.timestamp.io.preferences.Timestamp;
 import org.eu.es.gonzalo.time_tag.timestamp.io.preferences.Timestamps;
 
+import java.util.Collections;
 import java.util.Optional;
 
 public class MainActivity extends Activity {
@@ -61,6 +62,7 @@ public class MainActivity extends Activity {
         if (!last_timestamps.isPresent() || (timestamps = gson.fromJson(last_timestamps.get(), Timestamps.class)) == null || timestamps.getTimestamps().isEmpty()) {
             timestampsText = "NO TIMESTAMPS";
         } else {
+            Collections.reverse(timestamps.getTimestamps());
             StringBuilder stringBuilder = new StringBuilder();
             for (Timestamp timestamp : timestamps.getTimestamps()) {
                 stringBuilder.append(timestamp.getTimestamp())

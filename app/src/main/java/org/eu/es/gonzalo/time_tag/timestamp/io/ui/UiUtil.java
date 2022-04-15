@@ -31,7 +31,7 @@ public class UiUtil {
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
         Optional<String> last_timestamps = preferenceRepository.getString(androidContext.getId(R.string.id_last_timestamps));
         long max_last_timestamps = preferenceRepository.getLong(androidContext.getId(R.string.id_max_last_timestamps))
-                .orElse((long) AndroidContext.getInstance().getInteger(R.integer.max_last_timestamps));
+                .orElse((long) AndroidContext.getInstance().getInteger(R.integer.default_preference_max_last_timestamps));
 
         Gson gson = new Gson();
         Timestamps timestamps;
@@ -77,7 +77,7 @@ public class UiUtil {
         }
 
         long telegram_bot_delay_milliseconds = preferenceRepository.getLong(androidContext.getId(R.string.id_telegram_bot_delay_milliseconds))
-                .orElse((long) androidContext.getInteger(R.integer.telegram_bot_delay_milliseconds));
+                .orElse((long) androidContext.getInteger(R.integer.default_preference_telegram_bot_delay_milliseconds));
 
         TelegramBotAPI telegramBotAPI = new TelegramBotAPI(telegram_bot_api_token.get(), telegram_bot_user_chat_id.get());
         telegramBotAPI.setContext(androidContext.getApplicationContext());

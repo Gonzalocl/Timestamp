@@ -61,7 +61,7 @@ public class MainActivity extends Activity {
         PreferenceRepository preferenceRepository = PreferenceConfiguration
                 .getPreferenceRepository();
         Optional<String> last_timestamps = preferenceRepository
-                .getString(androidContext.getId(R.string.id_max_last_timestamps));
+                .getString(androidContext.getId(R.string.id_last_timestamps));
 
         String timestampsText;
         Gson gson = new Gson();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="id_preference_telegram_bot_api_token">telegram_bot_api_token</string>
+    <string name="id_telegram_bot_api_token">telegram_bot_api_token</string>
     <string name="id_telegram_bot_user_chat_id">telegram_bot_user_chat_id</string>
     <string name="id_telegram_bot_delay_milliseconds">telegram_bot_delay_milliseconds</string>
     <string name="id_last_timestamps">last_timestamps</string>

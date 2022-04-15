@@ -68,7 +68,7 @@ public class UiUtil {
             return;
         }
 
-        Optional<String> telegram_bot_api_token = preferenceRepository.getString(androidContext.getId(R.string.id_preference_telegram_bot_api_token));
+        Optional<String> telegram_bot_api_token = preferenceRepository.getString(androidContext.getId(R.string.id_telegram_bot_api_token));
         Optional<String> telegram_bot_user_chat_id = preferenceRepository.getString(androidContext.getId(R.string.id_telegram_bot_user_chat_id));
         if (!(telegram_bot_api_token.isPresent() && telegram_bot_user_chat_id.isPresent())) {
             Toast.makeText(androidContext.getApplicationContext(), "ERROR: token or chat id not present", Toast.LENGTH_SHORT).show();

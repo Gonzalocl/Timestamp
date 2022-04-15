@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <EditTextPreference
-        app:key="telegram_bot_api_token"
+        app:key="@string/id_preference_telegram_bot_api_token"
         app:title="Telegram bot api token"/>
 
     <EditTextPreference
-        app:key="telegram_bot_user_chat_id"
+        app:key="@string/id_telegram_bot_user_chat_id"
         app:title="Telegram bot user chat id"/>
 
     <org.eu.es.gonzalo.time_tag.timestamp.io.ui.EditNumberPreference
-        app:key="telegram_bot_delay_milliseconds"
+        app:key="@string/id_telegram_bot_delay_milliseconds"
         app:title="Telegram bot delay milliseconds"
         app:defaultValue="@integer/telegram_bot_delay_milliseconds"/>
 
     <org.eu.es.gonzalo.time_tag.timestamp.io.ui.EditNumberPreference
-        app:key="max_last_timestamps"
+        app:key="@string/id_max_last_timestamps"
         app:title="Max last timestamps"
         app:defaultValue="@integer/max_last_timestamps"/>
 

@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import org.eu.es.gonzalo.time_tag.timestamp.R;
 import org.eu.es.gonzalo.time_tag.timestamp.app.configuration.PreferenceConfiguration;
 import org.eu.es.gonzalo.time_tag.timestamp.app.repository.PreferenceRepository;
+import org.eu.es.gonzalo.time_tag.timestamp.io.context.AndroidContext;
 import org.eu.es.gonzalo.time_tag.timestamp.io.context.ContextInitializer;
 import org.eu.es.gonzalo.time_tag.timestamp.io.preferences.Timestamp;
 import org.eu.es.gonzalo.time_tag.timestamp.io.preferences.Timestamps;
@@ -23,10 +24,13 @@ import java.util.Optional;
 
 public class MainActivity extends Activity {
 
+    private AndroidContext androidContext;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ContextInitializer.initializeAllContexts(this);
+        androidContext = AndroidContext.getInstance();
         setContentView(R.layout.main_activity);
 
         updateMainTextView();
@@ -57,7 +61,7 @@ public class MainActivity extends Activity {
         PreferenceRepository preferenceRepository = PreferenceConfiguration
                 .getPreferenceRepository();
         Optional<String> last_timestamps = preferenceRepository
-                .getString(PreferenceRepository.Preference.LAST_TIMESTAMPS);
+                .getString(androidContext.getId(R.string.id_max_last_timestamps));
 
         String timestampsText;
         Gson gson = new Gson();

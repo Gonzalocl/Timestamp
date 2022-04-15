@@ -39,4 +39,12 @@ public class AndroidContext {
     public int getInteger(int id) {
         return getResources().getInteger(id);
     }
+
+    public String getString(int id) {
+        return getResources().getString(id);
+    }
+
+    public String getId(int id) {
+        return getString(id);
+    }
 }

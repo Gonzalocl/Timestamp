@@ -27,9 +27,10 @@ public class UiUtil {
     private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
 
     public static void storeTimestamp() {
+        AndroidContext androidContext = AndroidContext.getInstance();
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
-        Optional<String> last_timestamps = preferenceRepository.getString(PreferenceRepository.Preference.LAST_TIMESTAMPS);
-        long max_last_timestamps = preferenceRepository.getLong(PreferenceRepository.Preference.MAX_LAST_TIMESTAMPS)
+        Optional<String> last_timestamps = preferenceRepository.getString(androidContext.getId(R.string.id_last_timestamps));
+        long max_last_timestamps = preferenceRepository.getLong(androidContext.getId(R.string.id_max_last_timestamps))
                 .orElse((long) AndroidContext.getInstance().getInteger(R.integer.max_last_timestamps));
 
         Gson gson = new Gson();
@@ -46,7 +47,7 @@ public class UiUtil {
         timestamps.getTimestamps().add(timestamp);
         timestamps.setTimestamps(getLastElementsSubList(timestamps.getTimestamps(), (int) max_last_timestamps));
 
-        preferenceRepository.setString(PreferenceRepository.Preference.LAST_TIMESTAMPS, gson.toJson(timestamps));
+        preferenceRepository.setString(androidContext.getId(R.string.id_last_timestamps), gson.toJson(timestamps));
 
     }
 
@@ -56,7 +57,7 @@ public class UiUtil {
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
         Gson gson = new Gson();
 
-        Optional<String> last_timestamps = preferenceRepository.getString(PreferenceRepository.Preference.LAST_TIMESTAMPS);
+        Optional<String> last_timestamps = preferenceRepository.getString(androidContext.getId(R.string.id_last_timestamps));
 
         Timestamps timestamps;
         if (!last_timestamps.isPresent()
@@ -67,15 +68,15 @@ public class UiUtil {
             return;
         }
 
-        Optional<String> telegram_bot_api_token = preferenceRepository.getString(PreferenceRepository.Preference.TELEGRAM_BOT_API_TOKEN);
-        Optional<String> telegram_bot_user_chat_id = preferenceRepository.getString(PreferenceRepository.Preference.TELEGRAM_BOT_USER_CHAT_ID);
+        Optional<String> telegram_bot_api_token = preferenceRepository.getString(androidContext.getId(R.string.id_preference_telegram_bot_api_token));
+        Optional<String> telegram_bot_user_chat_id = preferenceRepository.getString(androidContext.getId(R.string.id_telegram_bot_user_chat_id));
         if (!(telegram_bot_api_token.isPresent() && telegram_bot_user_chat_id.isPresent())) {
             Toast.makeText(androidContext.getApplicationContext(), "ERROR: token or chat id not present", Toast.LENGTH_SHORT).show();
             end.run();
             return;
         }
 
-        long telegram_bot_delay_milliseconds = preferenceRepository.getLong(PreferenceRepository.Preference.TELEGRAM_BOT_DELAY_MILLISECONDS)
+        long telegram_bot_delay_milliseconds = preferenceRepository.getLong(androidContext.getId(R.string.id_telegram_bot_delay_milliseconds))
                 .orElse((long) androidContext.getInteger(R.integer.telegram_bot_delay_milliseconds));
 
         TelegramBotAPI telegramBotAPI = new TelegramBotAPI(telegram_bot_api_token.get(), telegram_bot_user_chat_id.get());
@@ -106,12 +107,13 @@ public class UiUtil {
                 () -> new Handler(Looper.getMainLooper()).postDelayed(
                         () -> telegramBotAPI.sendMessageNotificationDisabled(String.format("/fix %s", timestamp.getTimestamp()),
                                 () -> {
+                                    AndroidContext androidContext = AndroidContext.getInstance();
                                     PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
                                     Gson gson = new Gson();
 
                                     timestamp.setSent(true);
 
-                                    preferenceRepository.setString(PreferenceRepository.Preference.LAST_TIMESTAMPS,
+                                    preferenceRepository.setString(androidContext.getId(R.string.id_last_timestamps),
                                             gson.toJson(timestamps));
 
                                     step.run();
@@ -124,6 +126,7 @@ public class UiUtil {
     }
 
     public static void clearLastTimestamps() {
+        AndroidContext androidContext = AndroidContext.getInstance();
         PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
 
         Gson gson = new Gson();
@@ -131,7 +134,7 @@ public class UiUtil {
         Timestamps emptyTimestamps = new Timestamps();
         emptyTimestamps.setTimestamps(new LinkedList<>());
 
-        preferenceRepository.setString(PreferenceRepository.Preference.LAST_TIMESTAMPS,
+        preferenceRepository.setString(androidContext.getId(R.string.id_last_timestamps),
                 gson.toJson(emptyTimestamps));
 
     }

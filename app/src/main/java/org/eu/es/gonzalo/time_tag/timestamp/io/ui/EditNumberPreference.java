@@ -13,12 +13,14 @@ import androidx.preference.PreferenceManager;
 
 public class EditNumberPreference extends EditTextPreference {
 
-    public EditNumberPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public EditNumberPreference(@NonNull Context context, @Nullable AttributeSet attrs,
+                                int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         setNumberInputType();
     }
 
-    public EditNumberPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public EditNumberPreference(@NonNull Context context, @Nullable AttributeSet attrs,
+                                int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setNumberInputType();
     }
@@ -38,7 +40,8 @@ public class EditNumberPreference extends EditTextPreference {
         setPreferenceDataStore(new PreferenceDataStore() {
             @Override
             public void putString(String key, @Nullable String value) {
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(EditNumberPreference.this.getContext());
+                SharedPreferences sharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(EditNumberPreference.this.getContext());
                 sharedPreferences.edit().putLong(key, Long.parseLong(value)).apply();
             }
 
@@ -48,7 +51,8 @@ public class EditNumberPreference extends EditTextPreference {
                 if (defValue == null) {
                     return null;
                 }
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(EditNumberPreference.this.getContext());
+                SharedPreferences sharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(EditNumberPreference.this.getContext());
                 return String.valueOf(sharedPreferences.getLong(key, Long.parseLong(defValue)));
             }
         });

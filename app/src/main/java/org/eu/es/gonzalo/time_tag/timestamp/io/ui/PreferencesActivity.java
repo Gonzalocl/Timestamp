@@ -18,7 +18,8 @@ public class PreferencesActivity extends FragmentActivity {
 
     public static class PreferencesFragment extends PreferenceFragmentCompat {
         @Override
-        public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
+        public void onCreatePreferences(@Nullable Bundle savedInstanceState,
+                                        @Nullable String rootKey) {
             setPreferencesFromResource(R.xml.preferences, rootKey);
         }
     }

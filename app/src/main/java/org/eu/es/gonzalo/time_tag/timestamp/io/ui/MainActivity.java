@@ -49,17 +49,22 @@ public class MainActivity extends Activity {
     public void onClickSendButton(View view) {
         Button sendButton = (Button) view;
         sendButton.setEnabled(false);
-        UiUtil.sendTelegramBotMessageTimestamps(this::updateMainTextView, () -> sendButton.setEnabled(true));
+        UiUtil.sendTelegramBotMessageTimestamps(this::updateMainTextView,
+                () -> sendButton.setEnabled(true));
     }
 
     private void updateMainTextView() {
-        PreferenceRepository preferenceRepository = PreferenceConfiguration.getPreferenceRepository();
-        Optional<String> last_timestamps = preferenceRepository.getString(PreferenceRepository.Preference.LAST_TIMESTAMPS);
+        PreferenceRepository preferenceRepository = PreferenceConfiguration
+                .getPreferenceRepository();
+        Optional<String> last_timestamps = preferenceRepository
+                .getString(PreferenceRepository.Preference.LAST_TIMESTAMPS);
 
         String timestampsText;
         Gson gson = new Gson();
         Timestamps timestamps;
-        if (!last_timestamps.isPresent() || (timestamps = gson.fromJson(last_timestamps.get(), Timestamps.class)) == null || timestamps.getTimestamps().isEmpty()) {
+        if (!last_timestamps.isPresent()
+                || (timestamps = gson.fromJson(last_timestamps.get(), Timestamps.class)) == null
+                || timestamps.getTimestamps().isEmpty()) {
             timestampsText = "NO TIMESTAMPS";
         } else {
             Collections.reverse(timestamps.getTimestamps());
